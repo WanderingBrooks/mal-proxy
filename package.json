@@ -1,0 +1,28 @@
+{
+  "name": "mal-proxy",
+  "version": "1.0.0",
+  "description": "MalOTG proxy service",
+  "main": "handler.js",
+  "dependencies": {
+    "request": "^2.81.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/WanderingBrooks/mal-proxy.git"
+  },
+  "keywords": [
+    "anime",
+    "myanimelist",
+    "aws",
+    "serverless"
+  ],
+  "author": "Jason Brooks",
+  "bugs": {
+    "url": "https://github.com/WanderingBrooks/mal-proxy/issues"
+  },
+  "homepage": "https://github.com/WanderingBrooks/mal-proxy#readme"
+}
