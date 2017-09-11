@@ -5,20 +5,26 @@ const request = require('request');
 module.exports.malProxy = (event, context, callback) => {
   
   const response = {
-      statusCode: 200
+      statusCode: 200,
+      headers: {
+        'content-type': "application/x-www-form-urlencoded"
+      }
   };
 
   const type = event.queryStringParameters.type;
   const suffix = {
-    verify: `myanimelist.net/api/account/verify_credentials.xml`,
-    add: `https://myanimelist.net/api/animelist/add/`,
-    update: `https://myanimelist.net/api/animelist/update/`, 
-    delete: `https://myanimelist.net/api/animelist/delete/`
+    verify: `account/verify_credentials.xml`,
+    search: `anime/search.xml`,
+    add: `animelist/add/`,
+    update: `animelist/update/`, 
+    delete: `animelist/delete/`
   };
   
   const params = {
-    url: `https://${encodeURIComponent(event.queryStringParameters.username)}:${encodeURIComponent(event.queryStringParameters.password)}@${suffix[type]}`
+    url: `https://${encodeURIComponent(event.queryStringParameters.username)}:${encodeURIComponent(event.queryStringParameters.password)}@myanimelist.net/api/${suffix[type]}`
   };
+
+  console.log(params.url);
 
   if (type != 'verify') { 
     params.url += `${event.queryStringParameters.id}.xml`
@@ -31,11 +37,11 @@ module.exports.malProxy = (event, context, callback) => {
   } 
   else {
     request(params, function (error, res, body) {
-    console.log(error);
-    console.log(body);
-    response['body'] = body;
-    console.log(response);
-    callback(null, response);
+      console.log(error);
+      console.log(body);
+      response['body'] = body;
+      console.log(response);
+      callback(null, response);
   });
   }
 };
