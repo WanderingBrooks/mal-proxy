@@ -26,22 +26,35 @@ module.exports.malProxy = (event, context, callback) => {
 
   console.log(params.url);
 
-  if (type != 'verify') { 
-    params.url += `${event.queryStringParameters.id}.xml`
+  if (type === 'search') {
+    params.qs = event.queryStringParameters.data;
 
-    request.post(params, {form: {data: event.queryStringParameters.data}}, function (error, response, body) {
+    request(params, function (error, response, body) {
       console.log(error);
-      console.log(response);
       console.log(body);
+      response['body'] = body;
+      console.log(response);
+      callback(null, response);
     });
-  } 
-  else {
+  }
+  else if (type === 'verify') {
     request(params, function (error, res, body) {
       console.log(error);
       console.log(body);
       response['body'] = body;
       console.log(response);
       callback(null, response);
-  });
+    }); 
   }
-};
+  else if (type === 'add' || type === 'update' || type === 'delete') { 
+    params.url += `${event.queryStrigParameters.id}.xml`
+
+    request.post(params, {form: {data: event.queryStringParameters.data}}, function (error, response, body) {
+      console.log(error);
+      console.log(body);
+      response['body'] = body;
+      console.log(response);
+      callback(null, response);
+    });
+  }
+}
