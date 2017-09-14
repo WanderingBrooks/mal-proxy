@@ -9,9 +9,38 @@ stage: dev
 region: us-east-1
 
 functions:
-  malProxy:
+
+  searchMal:
     handler: handler.malProxy
     events:
       - http:
-          path:   malProxy
+          path: search
           method: get
+  
+  verifyCredentials:
+    handler: handler.malProxy
+    events:
+      - http:
+          path: verify
+          method: get
+  
+  addToMal:
+    handler: handler.malProxy
+    events:
+      - http:
+          path: add
+          method: post
+  
+  updateOnMal:
+    handler: handler.malProxy
+    events:
+      - http:
+          path: update
+          method: post
+  
+  deleteFromMal:
+    handler: handler.malProxy
+    events:
+      - http:
+          path: delete
+          method: post
