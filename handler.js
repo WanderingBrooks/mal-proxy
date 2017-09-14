@@ -1,6 +1,7 @@
 'use strict';
 
 const request = require('request');
+const qs = require('qs');
 
 module.exports.malProxy = (event, context, callback) => {
 
@@ -22,7 +23,18 @@ module.exports.malProxy = (event, context, callback) => {
     callback(null, response);
   }
 
-  const type = event.queryStringParameters.type;
+  let prefix;
+
+  if (event.httpMethod === "GET") {
+    prefix = event.queryStringParameters;
+  }
+  else if (event.httpMethod === "POST") {
+    prefix = qs.parse(event.body);
+    console.log(prefix);
+  }
+
+  const type = prefix.type;
+  
   const suffix = {
     verify: `account/verify_credentials.xml`,
     search: `anime/search.xml`,
@@ -32,7 +44,7 @@ module.exports.malProxy = (event, context, callback) => {
   };
   
   const params = {
-    url: `https://${encodeURIComponent(event.queryStringParameters.username)}:${encodeURIComponent(event.queryStringParameters.password)}@myanimelist.net/api/${suffix[type]}`
+    url: `https://${encodeURIComponent(prefix.username)}:${encodeURIComponent(prefix.password)}@myanimelist.net/api/${suffix[type]}`
   };
 
   console.log(params.url);
@@ -52,13 +64,13 @@ module.exports.malProxy = (event, context, callback) => {
   }
   else if (type === 'add' || type === 'update' ) { 
     console.log(type);
-    params.url += `${event.queryStrigParameters.id}.xml`;
+    params.url += `${prefix.id}.xml`;
 
-    request.post(params, {form: {data: event.queryStringParameters.data}}, handleResponse);
+    request.post(params, {form: {data: prefix.data}}, handleResponse);
   }
   else if (type === 'delete') { 
     console.log(type);
-    params.url += `${event.queryStrigParameters.id}.xml`;
+    params.url += `${prefix.id}.xml`;
 
     request.post(params, handleResponse);
   }
