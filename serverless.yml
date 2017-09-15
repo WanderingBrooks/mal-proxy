@@ -11,35 +11,35 @@ region: us-east-1
 functions:
 
   searchMal:
-    handler: handler.malProxy
+    handler: src/searchHandler.search
     events:
       - http:
           path: search
           method: get
   
   verifyCredentials:
-    handler: handler.malProxy
+    handler: src/verifyCredentialshandler.verifyCredentials
     events:
       - http:
           path: verify
           method: get
   
   addToMal:
-    handler: handler.malProxy
+    handler: src/addHandler.add
     events:
       - http:
           path: add
           method: post
   
   updateOnMal:
-    handler: handler.malProxy
+    handler: src/updateHandler.update
     events:
       - http:
           path: update
-          method: post
+          method: put
   
   deleteFromMal:
-    handler: handler.malProxy
+    handler: src/deleteHandler.delete
     events:
       - http:
           path: delete
